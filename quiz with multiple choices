@@ -1,0 +1,64 @@
+import java.util.Scanner;
+
+public class cod2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] questions = {
+                "What is the capital of France?",
+                "Which planet is known as the Red Planet?",
+                "Who developed Java programming language?",
+                "What is the square root of 64?",
+                "Who is the Chief Minister of Tamil Nadu?"
+        };
+
+        String[][] options = {
+                { "1. Paris", "2. Berlin", "3. Rome", "4. Madrid" },
+                { "1. Earth", "2. Mars", "3. Jupiter", "4. Saturn" },
+                { "1. Dennis Ritchie", "2. James Gosling", "3. Bjarne Stroustrup", "4. Tim Berners-Lee" },
+                { "1. 6", "2. 7", "3. 8", "4. 9" },
+                { "1. Stalin", "2. Edapaadi", "3. Jayalalitha", "4. Kalangar" }
+        };
+
+        int[] corans = { 1, 2, 2, 3, 1 };
+        int score = 0;
+        int timeLimitPerQuestion = 10;
+
+        for (int i = 0; i < questions.length; i++) {
+            System.out.println("\nQuestion " + (i + 1) + ": " + questions[i]);
+
+            for (int j = 0; j < options[i].length; j++) {
+                System.out.println(options[i][j]);
+            }
+
+            long startTime = System.currentTimeMillis();
+            int userAnswer = getAnswerWithinTimeLimit(scanner, timeLimitPerQuestion);
+            long timeTaken = (System.currentTimeMillis() - startTime) / 1000;
+
+            if (userAnswer == -1) {
+                System.out.println("Time's up! Moving to the next question...");
+            } else if (userAnswer == corans[i]) {
+                System.out.println("Correct!");
+                score++;
+            } else {
+                System.out.println("Incorrect.");
+            }
+            System.out.println("You answered in " + timeTaken + " seconds.");
+        }
+
+        System.out.println("\n--- Quiz Results ---");
+        System.out.println("Your score: " + score + " out of " + questions.length);
+
+        scanner.close();
+    }
+
+    private static int getAnswerWithinTimeLimit(Scanner scanner, int timeLimitSeconds) {
+        long start = System.currentTimeMillis();
+        while ((System.currentTimeMillis() - start) < timeLimitSeconds * 1000) {
+            if (scanner.hasNextInt()) {
+                return scanner.nextInt();
+            }
+        }
+        return -1;
+    }
+}

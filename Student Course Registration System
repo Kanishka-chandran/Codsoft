@@ -1,0 +1,160 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+class cod3 {
+    String code;
+    String title;
+    int capacity;
+    int enrolled;
+
+   
+    cod3(String code, String title, int capacity) {
+        this.code = code;
+        this.title = title;
+        this.capacity = capacity;
+        this.enrolled = 0;
+    }
+
+    
+    void display() {
+        System.out.println(code + ": " + title + " (Capacity: " + capacity + ", Enrolled: " + enrolled + ")");
+    }
+
+   
+    boolean registerStudent() {
+        if (enrolled < capacity) {
+            enrolled++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+   
+    void unregisterStudent() {
+        if (enrolled > 0) {
+            enrolled--;
+        }
+    }
+}
+
+
+class Student {
+    String name;
+    ArrayList<cod3> courses;
+
+   
+    Student(String name) {
+        this.name = name;
+        this.courses = new ArrayList<>();
+    }
+
+  
+    void registerForCourse(cod3 course) {
+        if (course.registerStudent()) {
+            courses.add(course);
+            System.out.println("Registered for " + course.title);
+        } else {
+            System.out.println("Course is full.");
+        }
+    }
+
+   
+    void dropCourse(cod3 course) {
+        if (courses.contains(course)) {
+            course.unregisterStudent();
+            courses.remove(course);
+            System.out.println("Dropped " + course.title);
+        } else {
+            System.out.println("You are not registered in this course.");
+        }
+    }
+
+    void displayRegisteredCourses() {
+        if (courses.isEmpty()) {
+            System.out.println("No registered courses.");
+        } else {
+            System.out.println("Registered Courses:");
+            for (cod3 course : courses) {
+                System.out.println(course.title);
+            }
+        }
+    }
+}
+
+public class SimpleCourseRegistration {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        
+        cod3 course1 = new cod3("DA101", "Data Analytics", 2);
+        cod3 course2 = new cod3("AI102", "Artificial Intelligence", 2);
+        cod3 course3 = new cod3("MA103", "Database Systems", 2);
+
+        cod3[] courses = { course1, course2, course3 };
+
+        Student student = new Student("John Doe");
+
+        int choice;
+        do {
+          
+            System.out.println("\n1. List Courses");
+            System.out.println("2. Register for a Course");
+            System.out.println("3. Drop a Course");
+            System.out.println("4. View Registered Courses");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                 
+                    System.out.println("\nAvailable Courses:");
+                    for (cod3 course : courses) {
+                        course.display();
+                    }
+                    break;
+
+                case 2:
+                    
+                    System.out.print("Enter course code to register: ");
+                    String registerCode = scanner.next();
+                    for (cod3 course : courses) {
+                        if (course.code.equalsIgnoreCase(registerCode)) {
+                            student.registerForCourse(course);
+                            break;
+                        }
+                    }
+                    break;
+
+                case 3:
+                   
+                    System.out.print("Enter course code to drop: ");
+                    String dropCode = scanner.next();
+                    for (cod3 course : courses) {
+                        if (course.code.equalsIgnoreCase(dropCode)) {
+                            student.dropCourse(course);
+                            break;
+                        }
+                    }
+                    break;
+
+                case 4:
+                   
+                    student.displayRegisteredCourses();
+                    break;
+
+                case 5:
+                    
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 5);
+
+        scanner.close();
+    }
+}
